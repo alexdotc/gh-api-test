@@ -60,6 +60,7 @@ content = base64.b64decode(content).decode().splitlines()
 print("UPDATE")
 line, update_sha = update(sha, content)
 print(f"Updated to sha {update_sha}")
+explode = False
 
 # loop
 for n in range(0, iters):
@@ -71,13 +72,14 @@ for n in range(0, iters):
         assert new_sha == update_sha
     except AssertionError:
         print(f"Got old SHA {new_sha} -- Expected {update_sha} !", file=sys.stderr)
-        raise
+        explode = True
     try:
         assert content[line] == sha # this sometimes fails and sometimes doesnt. it usually fails very quickly, within a few iterations
     except AssertionError:
         print(f"Content at line {line} is {content[line]} -- Expected {sha} !", file=sys.stderr)
-        raise
+        explode = True
     sha = new_sha
     print("UPDATE")
-    line, update_sha = update(sha, content)
+    line, update_sha = update(sha, content) # NO 409
     print(f"Updated to sha {update_sha}")
+    if explode: break
