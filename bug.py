@@ -8,6 +8,7 @@ import sys
 import time
 
 iters = 10
+max_wait = 15
 lines = 8000
 
 owner = "alexdotc"
@@ -31,7 +32,7 @@ def get():
     return j['sha'],j['content']
 
 def update(sha, content):
-    seconds = random.randint(5,15)
+    seconds = random.randint(5,max_wait)
     line = random.randint(0,lines-1)
 
     message = f"Update SHA {sha}, line {line}, after {seconds} seconds"
